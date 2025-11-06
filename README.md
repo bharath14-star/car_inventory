@@ -1,3 +1,6 @@
+# car_portal45
+>>>>>>> 4d5138314c0263464f9d5c91fb0243a4badeda90
+=======
 # Frontend
 
 This is the frontend for the car portal application. It is built with React and Vite.
@@ -12,3 +15,6 @@ To get started with this project, you will need to have Node.js and npm installe
 ## Scripts
 
 * `npm run dev`: Starts the frontend development server.
+=======
+# car_portal45
+>>>>>>> 4d5138314c0263464f9d5c91fb0243a4badeda90
