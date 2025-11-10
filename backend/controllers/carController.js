@@ -1,6 +1,7 @@
 const Car = require('../models/Car');
 const fs = require('fs');
 const path = require('path');
+const ExcelJS = require('exceljs');
 
 const uploadDir = path.join(__dirname, '..', process.env.UPLOAD_DIR || 'uploads');
 
@@ -189,5 +190,74 @@ exports.getStats = async (req, res) => {
     res.json({ total, today, thisWeek, recent, topReg, topPersons, dailyCounts });
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+};
+
+// Export all cars to Excel (Admin only)
+exports.exportCars = async (req, res) => {
+  try {
+    // Check if user is admin
+    if (!req.user || req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'Access denied. Admin only.' });
+    }
+
+    // Fetch all cars
+    const cars = await Car.find({}).populate('createdBy', 'name email').lean();
+
+    // Create Excel workbook
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Car Inventory');
+
+    // Define columns
+    worksheet.columns = [
+      { header: 'Registration Number', key: 'regNo', width: 20 },
+      { header: 'Make', key: 'make', width: 15 },
+      { header: 'Model', key: 'model', width: 15 },
+      { header: 'Variant', key: 'variant', width: 15 },
+      { header: 'Year', key: 'year', width: 10 },
+      { header: 'Colour', key: 'colour', width: 10 },
+      { header: 'KMP', key: 'kmp', width: 10 },
+      { header: 'Person Name', key: 'personName', width: 20 },
+      { header: 'Cell Number', key: 'cellNo', width: 15 },
+      { header: 'Price', key: 'price', width: 15 },
+      { header: 'In/Out Status', key: 'inOutStatus', width: 15 },
+      { header: 'In/Out Date Time', key: 'inOutDateTime', width: 20 },
+      { header: 'Created By', key: 'createdBy', width: 20 },
+      { header: 'Created At', key: 'createdAt', width: 20 },
+      { header: 'Updated At', key: 'updatedAt', width: 20 }
+    ];
+
+    // Add data rows
+    cars.forEach(car => {
+      worksheet.addRow({
+        regNo: car.regNo,
+        make: car.make,
+        model: car.model,
+        variant: car.variant,
+        year: car.year,
+        colour: car.colour,
+        kmp: car.kmp,
+        personName: car.personName,
+        cellNo: car.cellNo,
+        price: car.price,
+        inOutStatus: car.inOutStatus,
+        inOutDateTime: car.inOutDateTime ? new Date(car.inOutDateTime).toLocaleString() : '',
+        createdBy: car.createdBy ? car.createdBy.name : '',
+        createdAt: car.createdAt ? new Date(car.createdAt).toLocaleString() : '',
+        updatedAt: car.updatedAt ? new Date(car.updatedAt).toLocaleString() : ''
+      });
+    });
+
+    // Set response headers
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', `attachment; filename=car_inventory_${new Date().toISOString().slice(0,10)}.xlsx`);
+
+    // Write to response
+    await workbook.xlsx.write(res);
+    res.end();
+
+  } catch (err) {
+    console.error('Export error:', err);
+    res.status(500).json({ message: 'Export failed', error: err.message });
   }
 };

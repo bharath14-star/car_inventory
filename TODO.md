@@ -1,11 +1,22 @@
-# TODO: Implement Forgot Password Feature
+# TODO: Add Export to Excel Feature for Admin
 
-- [x] Edit `backend/controllers/authController.js` to change JWT token expiry from '1h' to '60s' in forgotPassword function.
-- [x] Edit `backend/utils/email.js` to change email sender from `process.env.EMAIL_USER` to `"CarPortal Support" <noreply@carportal.com>"` in sendEmail function.
-- [x] Verify the changes and ensure environment variables are set (EMAIL_USER, EMAIL_PASS, FRONTEND_URL).
-- [x] Test the APIs in Postman.
-- [x] Explain frontend integration and API calls.
-- [ ] Configure Gmail credentials in .env file.
-- [ ] Test successful email sending.
-- [ ] Test token verification and password reset.
-- [ ] Test error scenarios (expired token, invalid token, etc.).
+## Backend Changes
+- [ ] Install exceljs dependency in backend/package.json
+- [ ] Add exportCars function in backend/controllers/carController.js
+  - Check if user is admin
+  - Fetch all cars from database
+  - Generate Excel file with car details
+  - Send file as download
+- [ ] Add new route /api/admin/export-cars in backend/routes/carRoutes.js
+
+## Frontend Changes
+- [ ] Modify frontend/src/pages/AdminDashboard.jsx
+  - Add logic to check user role (admin only)
+  - Add Export button visible only to admins
+  - Implement download functionality on button click
+
+## Testing
+- [ ] Test backend route in Postman (with admin token)
+- [ ] Test frontend download from AdminDashboard
+- [ ] Verify button is hidden for non-admin users
+- [ ] Verify Excel file contains correct data

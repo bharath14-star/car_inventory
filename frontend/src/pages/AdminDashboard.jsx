@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import API from '../api'
 import { useNavigate } from 'react-router-dom'
+import { jwtDecode } from 'jwt-decode'
 
 function Sparkline({ data = [] }){
   if (!data || data.length === 0) return <div>No trend</div>;
@@ -23,6 +24,7 @@ function Sparkline({ data = [] }){
 export default function AdminDashboard(){
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [userRole, setUserRole] = useState(null);
   const navigate = useNavigate();
 
   const load = async () => {
@@ -30,12 +32,40 @@ export default function AdminDashboard(){
     try {
       const res = await API.get('/dashboard');
       setStats(res.data);
+
+      // Get user role from token
+      const token = localStorage.getItem('token');
+      if (token) {
+        const decoded = jwtDecode(token);
+        setUserRole(decoded.role);
+      }
     } catch (err) {
       console.error(err);
     } finally { setLoading(false); }
   }
 
   useEffect(()=>{ load(); }, []);
+
+  const handleExport = async () => {
+    try {
+      const response = await API.get('/admin/export-cars', {
+        responseType: 'blob' // Important for file download
+      });
+
+      // Create a blob link to download the file
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `car_inventory_${new Date().toISOString().slice(0,10)}.xlsx`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Export failed:', err);
+      alert('Export failed. Please try again.');
+    }
+  };
 
   if (loading) return <div>Loading admin dashboard...</div>;
   if (!stats) return <div>No data</div>;
@@ -50,6 +80,13 @@ export default function AdminDashboard(){
   return (
     <div>
       <h2>Admin Dashboard</h2>
+      {userRole === 'admin' && (
+        <div className="mb-3">
+          <button className="btn btn-success" onClick={handleExport}>
+            <i className="bi bi-download me-2"></i>Export to Excel
+          </button>
+        </div>
+      )}
       <div className="row mb-3">
         <div className="col-md-3">
           <div className="card p-3 mb-3">

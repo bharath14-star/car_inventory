@@ -72,6 +72,27 @@ export default function RecordsList(){
 
   const onSearch = () => { setPage(1); fetchRecords({ page: 1 }); }
 
+  const handleExport = async () => {
+    try {
+      const response = await API.get('/admin/export-cars', {
+        responseType: 'blob' // Important for file download
+      });
+
+      // Create a blob link to download the file
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `car_inventory_${new Date().toISOString().slice(0,10)}.xlsx`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Export failed:', err);
+      alert('Export failed. Please try again.');
+    }
+  };
+
   const totalPages = Math.max(1, Math.ceil(total / limit));
 
   return (
@@ -114,7 +135,14 @@ export default function RecordsList(){
 
       <div className="mb-2 d-flex justify-content-between">
         <div>Showing {records.length} of {total} results</div>
-        <div>Page {page} / {totalPages}</div>
+        <div className="d-flex align-items-center">
+          {isAdmin && (
+            <button className="btn btn-success me-3" onClick={handleExport}>
+              <i className="bi bi-download me-2"></i>Export to Excel
+            </button>
+          )}
+          Page {page} / {totalPages}
+        </div>
       </div>
 
       <table className="table table-striped">

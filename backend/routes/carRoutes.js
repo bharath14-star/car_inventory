@@ -45,5 +45,6 @@ router.get('/car-records', auth, carController.getAllCars);
 router.get('/car/:id', auth, carController.getCar);
 router.put('/car/:id', auth, upload.fields([{ name: 'photos', maxCount: 6 }, { name: 'video', maxCount: 1 }]), carController.updateCar);
 router.delete('/car/:id', auth, carController.deleteCar);
+router.get('/admin/export-cars', auth, carController.exportCars);
 
 module.exports = router;
