@@ -3,7 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
-// MONGO_URI="mongodb+srv://ogiralarajeswari08_db_user:RajiReddy@cluster0.68omnlq.mongodb.net/?appName=Cluster0"
+const { MONGO_URI } = require('./controllers/config/Database');
 const authRoutes = require('./routes/authRoutes');
 const carRoutes = require('./routes/carRoutes');
 
@@ -26,13 +26,13 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: 'Server error', error: err.message });
 });
 
-mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/car_portal', {
+mongoose.connect(MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 }).then(() => {
-  console.log('MongoDB connected');
+  console.log('MongoDB Atlas connected');
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 }).catch(err => {
-  console.error('MongoDB connection error:', err);
+  console.error('MongoDB Atlas connection error:', err);
   process.exit(1);
 });
