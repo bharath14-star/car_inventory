@@ -3,11 +3,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
-<<<<<<< HEAD
 
-=======
 const { MONGO_URI } = require('./controllers/config/Database');
->>>>>>> e368581170e8f1055b14ba4078bea5b8b92ec2ca
+
 const authRoutes = require('./routes/authRoutes');
 const carRoutes = require('./routes/carRoutes');
 
