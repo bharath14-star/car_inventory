@@ -1,8 +1,13 @@
 import axios from 'axios';
 
 const API = axios.create({
+<<<<<<< HEAD
  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
 // baseURL:import.meta.env.VITE_API_URL || 'https://background-3934.onrender.com/api',
+=======
+  // baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+import:meta.env.VITE_API_URL || 'https://background-3934.onrender.com/api',
+>>>>>>> 16ca8664af667037a9dea611901b34d8c680f7fb
 });
 
 // Add request interceptor
