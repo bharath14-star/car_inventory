@@ -119,6 +119,7 @@ export default function CarForm(){
         <div className="mb-3"><label className="form-label">Person Name</label><input className="form-control" {...register('personName', { required: true })} />{errors.personName && <small className="text-danger">Required</small>}</div>
         <div className="mb-3"><label className="form-label">Cell No</label><input className="form-control" {...register('cellNo', { required: true })} />{errors.cellNo && <small className="text-danger">Required</small>}</div>
         <div className="mb-3"><label className="form-label">Price</label><input type="number" className="form-control" {...register('price', { required: true })} />{errors.price && <small className="text-danger">Required</small>}</div>
+        <div className="mb-3"><label className="form-label">Referral ID</label><input className="form-control" {...register('referralId', { required: true })} maxLength="16" />{errors.referralId && <small className="text-danger">Required</small>}</div>
 
         <div className="mb-3">
           <label className="form-label">Vehicle Photos</label>

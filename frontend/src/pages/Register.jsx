@@ -82,6 +82,18 @@ export default function Register() {
           </div>
 
           <div className="mb-3">
+            <label className="form-label">Employee ID</label>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Enter employee ID (max 16 characters)"
+              {...register('employeeId')}
+              maxLength="16"
+              required
+            />
+          </div>
+
+          <div className="mb-3">
             <label className="form-label">Password</label>
             <div className="input-group">
               <input

@@ -98,7 +98,7 @@ export default function RecordsList(){
   return (
     <div>
       <div className="d-flex mb-3">
-        <input className="form-control me-2" placeholder="Search regNo, person, make..." value={q} onChange={e=>setQ(e.target.value)} />
+        <input className="form-control me-2" placeholder="Search regNo, person, make, Referral ID..." value={q} onChange={e=>setQ(e.target.value)} />
         <button className="btn btn-outline-primary me-3" onClick={onSearch}>Search</button>
 
         <div className="me-2 d-flex align-items-center">
@@ -150,6 +150,7 @@ export default function RecordsList(){
           <tr>
             <th>Reg No</th>
             <th>Person</th>
+            <th>Referral ID</th>
             <th>In/Out</th>
             <th>Date</th>
             <th>Photos</th>
@@ -162,6 +163,7 @@ export default function RecordsList(){
             <tr key={r._id}>
               <td>{r.regNo}</td>
               <td>{r.personName}</td>
+              <td>{r.referralId}</td>
               <td>{r.inOutStatus}</td>
               <td>{r.inOutDateTime ? new Date(r.inOutDateTime).toLocaleString() : ''}</td>
               <td>

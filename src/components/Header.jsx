@@ -24,7 +24,7 @@ export default function Header(){
         <Link className="navbar-brand" to="/">Car Portal</Link>
         <div>
           {user && !isDashboard && !isRecords && !isEntry && <Link to="/records" className="btn btn-sm btn-outline-light me-2">Records</Link>}
-          {user && !isDashboard && !isRecords && !isEntry && <Link to="/entry" className="btn btn-sm btn-outline-light me-2">New Entry</Link>}
+          {user && isAdmin && !isDashboard && !isRecords && !isEntry && <Link to="/entry" className="btn btn-sm btn-outline-light me-2">New Entry</Link>}
           {!user && <Link to="/login" className="btn btn-sm btn-outline-light me-2">Login</Link>}
           {!user && <Link to="/register" className="btn btn-sm btn-outline-light">Register</Link>}
           {user && <span className="text-light me-2">{user.name} {isAdmin && '(Admin)'}</span>}
